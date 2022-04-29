@@ -1,0 +1,33 @@
+﻿@using WebApplication2.Models
+@model IEnumerable<WebApplication2.Models.Databases>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+    var keyword = (KeywordsInfo) ViewData["keyword"];
+}
+<h1>Базы данных по ключевому слову @keyword.Keyword_rus</h1>
+<br>
+<div>
+    <table class="table table-bordered table-striped" style="width: 100%">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>База данных</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.DatabaseID
+                    </td>
+                    <td>
+                        <a href="~/DbPage/DbPage?id=@item.DatabaseID">@item.Name_rus</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

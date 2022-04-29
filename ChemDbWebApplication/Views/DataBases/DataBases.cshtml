@@ -1,0 +1,112 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "DataBases";
+}
+
+
+@using WebApplication2.Models
+@model IEnumerable<WebApplication2.ITabled>
+<div>
+    <h1>Базы данных</h1>
+    <br>
+</div>
+<div>
+    <table class="table table-bordered table-striped" style="width: 100%">
+        <thead style="vertical-align: baseline">
+        <tr>
+            <th style="font-size: large">
+                №
+            </th>
+            <th>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @ViewData["Filter"]
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="~/DataBases/DataBases?filter=По названию">По названию</a>
+            <a class="dropdown-item" href="~/DataBases/DataBases?filter=Организация разработчик">Организация разработчик с указанием страны</a>
+            <a class="dropdown-item" href="~/DataBases/DataBases?filter=Ключевые слова">Ключевые слова</a>
+            <a class="dropdown-item" href="~/DataBases/DataBases?filter=Литературные ссылки">Литературные ссылки</a>
+        </div>
+    </div>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @switch (Model)
+        {
+            case IEnumerable<KeywordsInfo>:
+            {
+                foreach (var keyword in (IEnumerable<KeywordsInfo>) Model)
+                {
+                    <tr>
+                        <td>@keyword.KeywordID</td>
+                        <td>
+                            @if (string.IsNullOrEmpty(keyword.Keyword_eng))
+                            {
+                                <a href="~/KeyWord/KeyWord?id=@keyword.KeywordID">@keyword.Keyword_rus</a>
+                            }
+                            else
+                            {
+                                <a href="~/KeyWord/KeyWord?id=@keyword.KeywordID">@keyword.Keyword_eng</a>
+                            }
+                        </td>
+                    </tr>
+                }
+                break;
+            }
+            case IEnumerable<Databases>:
+            {
+                foreach (var item in (IEnumerable<Databases>) Model)
+                {
+                    <tr>
+                        <td>
+                            @item.DatabaseID
+                        </td>
+                        <td>
+                            <a href="~/DbPage/DbPage?id=@item.DatabaseID">@item.Name_rus</a>
+                        </td>
+                    </tr>
+                }
+                break;
+            }
+            case IEnumerable<OrganisationsInfo>:
+            {
+                foreach (var item in ((IEnumerable<OrganisationsInfo>) Model))
+                {
+                    <tr>
+                        <td>
+                            @item.OrganisationID
+                        </td>
+                        <td>
+                            @if (string.IsNullOrEmpty(item.Name_rus))
+                            {
+                                if (string.IsNullOrEmpty(item.Name_eng))
+                                {
+                                    if (string.IsNullOrEmpty(item.Abbreviation_rus))
+                                    {
+                                        @item.Abbreviation_eng
+                                    }
+                                    else
+                                    {
+                                        @item.Abbreviation_rus
+                                    }
+                                }
+                                else
+                                {
+                                    @item.Name_eng
+                                }
+                            }
+                            else
+                            {
+                                @item.Name_rus
+                            }
+                        </td>
+                    </tr>
+                }
+                break;
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,55 @@
+﻿@using WebApplication2.Models
+@model IEnumerable<WebApplication2.Models.Databases>
+@{
+    Layout = "_Layout";
+    var keywords = (IEnumerable<KeywordsInfo>)ViewData["keywords"];
+}
+
+<p>
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Показать фильтры
+    </button>
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        @using (Html.BeginForm(new {action = "SubmitKeywords"}))
+        {
+            int index = 0; 
+                foreach (var kw in keywords)
+                {
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="keywordsNames" id="@index" value="@kw.Keyword_rus"/>
+                    <label class="form-check-label" for="@index">
+                        @kw.Keyword_rus
+                    </label>
+                    @{ index++; }
+                </div>
+                }
+            <input type="submit" value="Submit" />
+        }
+
+    </div>
+</div>
+<div>
+    <table class="table table-bordered table-striped" style="width: 100%">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>База данных</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.DatabaseID
+                </td>
+                <td>
+                    <a href="~/DbPage/DbPage?id=@item.DatabaseID">@item.Name_rus</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
