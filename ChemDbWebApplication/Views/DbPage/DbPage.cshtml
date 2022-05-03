@@ -1,24 +1,22 @@
-﻿
-@using Microsoft.AspNetCore.Html
+﻿@using Microsoft.AspNetCore.Html
 @using WebApplication2.Models
-
-@{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
-}
 @model List<LitRefModel>
-@{ var organisationsInfos = (IEnumerable<OrganisationsInfo>)ViewData["organisations"];
+@{
+    Layout = "_Layout";
+    var organisationsInfos = (IEnumerable<OrganisationsInfo>)ViewData["organisations"];
     var keywordsString = (string)ViewData["keywords"];
     var authors = (IEnumerable<AuthorsInfo>) ViewData["authors"];
     var dataBase = (Databases) ViewData["dbData"];
     var countriesString = (string) ViewData["countries"];
+    string title = string.IsNullOrEmpty(dataBase.Name_rus) ? dataBase.Name_eng : dataBase.Name_rus;
+    ViewBag.Title = title;
     Dictionary<string, string> dbInfoDictionary = new Dictionary<string, string>();
     dbInfoDictionary.Add("Название", string.IsNullOrEmpty(dataBase.Name_rus) ? dataBase.Name_eng : dataBase.Name_rus);
     dbInfoDictionary.Add("Аббривеатура", string.IsNullOrEmpty(dataBase.Abbreviation_rus) ? dataBase.Abbreviation_eng : dataBase.Abbreviation_rus);
     dbInfoDictionary.Add("Примечание", string.IsNullOrEmpty(dataBase.Comments_rus) ? dataBase.Comments_eng : dataBase.Comments_rus);
     dbInfoDictionary.Add("Ключевые слова", keywordsString);
     dbInfoDictionary.Add("Страны разработчики", countriesString);
-    dbInfoDictionary.Add("Сайт", $"<a href={dataBase.URL}>{dataBase.URL}</a>"); // сделать активной ссылкой !
+    dbInfoDictionary.Add("Сайт", $"<a href={dataBase.URL}>{dataBase.URL}</a>");
     dbInfoDictionary.Add("Телефон", dataBase.Phone);
 }
 <h2>@dataBase.Name_rus</h2>

@@ -2,9 +2,11 @@
 @model IEnumerable<WebApplication2.Models.Databases>
 
 @{
-    ViewBag.Title = "title";
+
     Layout = "_Layout";
     var keyword = (KeywordsInfo) ViewData["keyword"];
+    string title = string.IsNullOrEmpty(keyword.Keyword_eng) ? keyword.Keyword_rus : keyword.Keyword_eng;
+    ViewBag.Title = title;
 }
 <h1>Базы данных по ключевому слову @keyword.Keyword_rus</h1>
 <br>
