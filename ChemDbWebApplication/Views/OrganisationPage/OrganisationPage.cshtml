@@ -1,8 +1,55 @@
-﻿@model IEnumerable<WebApplication2.ITabled>
+﻿@using WebApplication2.Models
+@model IEnumerable<Databases>
 
 @{
-    ViewBag.Title = "title";
+    var organisation = (OrganisationsInfo)ViewData["organisation"];
+    var title = string.IsNullOrEmpty(organisation.Name_rus) ? organisation.Name_eng : organisation.Name_rus;
+    ViewBag.Title = title;
     Layout = "_Layout";
+    Dictionary<string, string> organisationInfoDict = new Dictionary<string, string>();
+    organisationInfoDict.Add("Название", string.IsNullOrEmpty(organisation.Name_rus) ? organisation.Name_eng : organisation.Name_rus);
+    organisationInfoDict.Add("Страна", (string)ViewData["countryName"]);
+    organisationInfoDict.Add("Аббривеатура", string.IsNullOrEmpty(organisation.Abbreviation_eng) ? organisation.Abbreviation_rus : organisation.Abbreviation_eng);
+    organisationInfoDict.Add("БД организации", Model.Count().ToString());
 }
 
-<h2>title</h2>
+<h2>@title</h2>
+<h4>Информация:</h4>
+<table class="table table-bordered table-striped" style="width: 100%">
+    <tbody>
+    @foreach (var (key, value) in organisationInfoDict)
+    {
+        <tr>
+            <td>
+                @key
+            </td>
+            <td>
+                @value
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<h4>Базы данных организации:</h4>
+<table class="table table-bordered table-striped" style="width: 100%">
+    <thead>
+    <tr>
+        <td>№</td>
+        <td>Название</td>
+    </tr>
+    </thead>
+    <tbody>
+    @{ int index = 1;}
+    @foreach (var db in Model)
+    {
+        <tr>
+            <td>@index</td>
+            @{
+                index++;
+                string name = string.IsNullOrEmpty(db.Name_rus) ? @db.Name_eng : @db.Name_rus;
+            }
+            <td><a href="~/DbPage/DbPage?id=@db.DatabaseID">@name</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

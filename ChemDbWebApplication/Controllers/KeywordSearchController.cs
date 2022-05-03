@@ -20,9 +20,15 @@ public class KeywordSearchController : Controller
         return View(_context.Databases);
     }
     
+    
+    
     [HttpPost]
     public IActionResult SubmitKeywords(string[] keywordsNames) 
     {
+        if (keywordsNames.Length == 0)
+        {
+            return View("KeywordSearch");
+        }
         ViewData["keywords"] = _context.KeywordsInfo;
         var keywordsSub = _context.KeywordsInfo.Where(x =>
             keywordsNames.Contains(x.Keyword_rus) || keywordsNames.Contains(x.Keyword_eng));

@@ -22,9 +22,15 @@ public class OrganisationPageController : Controller
     public IActionResult OrganisationPage(int id)
     {
         var organisation = _context.OrganisationsInfo.First(x => x.OrganisationID == id);
-        ViewBag["organisation"] = organisation;
-        List<Databases> databasesList = new List<Databases>();
+        ViewData["organisation"] = organisation;
+        var countryInfo = _context.CountriesInfo.First(x => x.CountryID == organisation.CountryID);
+        var countryName = string.IsNullOrEmpty(countryInfo.CountryName_rus) ? countryInfo.CountryName_eng : countryInfo.CountryName_rus;
+        ViewData["countryName"] = countryName;
+        var dbIds = _context.OrganisationsInfo_Databases
+            .Where(x => x.OrganisationID == organisation.OrganisationID)
+            .Select(x => x.DatabaseID);
+        var dataBases = _context.Databases.Where(x => dbIds.Contains(x.DatabaseID));
         
-        return View();
+        return View(dataBases);
     }
 }

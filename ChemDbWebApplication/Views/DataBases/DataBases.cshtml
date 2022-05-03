@@ -18,17 +18,17 @@
                 №
             </th>
             <th>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            @ViewData["Filter"]
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="~/DataBases/DataBases?filter=По названию">По названию</a>
-            <a class="dropdown-item" href="~/DataBases/DataBases?filter=Организация разработчик">Организация разработчик с указанием страны</a>
-            <a class="dropdown-item" href="~/DataBases/DataBases?filter=Ключевые слова">Ключевые слова</a>
-            <a class="dropdown-item" href="~/DataBases/DataBases?filter=Литературные ссылки">Литературные ссылки</a>
-        </div>
-    </div>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" href="#" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @ViewData["Filter"]
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="~/DataBases/DataBases?filter=По названию">По названию</a>
+                        <a class="dropdown-item" href="~/DataBases/DataBases?filter=Организация разработчик">Организация разработчик</a>
+                        <a class="dropdown-item" href="~/DataBases/DataBases?filter=Ключевые слова">Ключевые слова</a>
+                        <a class="dropdown-item" href="~/DataBases/DataBases?filter=Литературные ссылки">Литературные ссылки</a>
+                    </div>
+                </div>
             </th>
         </tr>
         </thead>
@@ -72,13 +72,16 @@
             }
             case IEnumerable<OrganisationsInfo>:
             {
+                
                 foreach (var item in ((IEnumerable<OrganisationsInfo>) Model))
                 {
+                    
                     <tr>
                         <td>
                             @item.OrganisationID
                         </td>
                         <td>
+                            <a href="~/OrganisationPage/OrganisationPage?id=@item.OrganisationID">
                             @if (string.IsNullOrEmpty(item.Name_rus))
                             {
                                 if (string.IsNullOrEmpty(item.Name_eng))
@@ -101,6 +104,7 @@
                             {
                                 @item.Name_rus
                             }
+                            </a>
                         </td>
                     </tr>
                 }
