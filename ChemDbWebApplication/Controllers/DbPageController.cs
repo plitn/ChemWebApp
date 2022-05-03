@@ -71,7 +71,7 @@ public class DbPageController : Controller
         
 
         string keywordsString = "";
-        keywordsString = string.Join(", ",  keywords.Select(x => x.Keyword_rus));
+        keywordsString = string.Join(", ",  keywords.Select(x => $"<a href=\"../KeyWord/Keyword?id={x.KeywordID}\">{x.Keyword_rus}</a>"));
 
         string countriesString = "";
         countriesString = string.Join(", ", countries.Select(x => x.CountryName_rus));
