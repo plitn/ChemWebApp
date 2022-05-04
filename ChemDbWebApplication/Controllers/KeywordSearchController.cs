@@ -13,23 +13,24 @@ public class KeywordSearchController : Controller
     {
         _context = db;
     }
-    // GET
-    public IActionResult KeywordSearch()
+
+    [HttpGet]
+    public IActionResult KeywordSearch([FromQuery]int pgn = 1)
     {
+        ViewData["pageNumber"] = pgn;
         ViewData["keywords"] = _context.KeywordsInfo;
-        return View(_context.Databases);
+        return View("KeywordSearch", _context.Databases);
     }
-    
-    
-    
+
     [HttpPost]
-    public IActionResult SubmitKeywords(string[] keywordsNames) 
+    public IActionResult SubmitKeywords(string[] keywordsNames)
     {
         if (keywordsNames.Length == 0)
         {
             return View("KeywordSearch");
         }
         ViewData["keywords"] = _context.KeywordsInfo;
+        ViewData["pageNumber"] = 1;
         var keywordsSub = _context.KeywordsInfo.Where(x =>
             keywordsNames.Contains(x.Keyword_rus) || keywordsNames.Contains(x.Keyword_eng));
         List<Databases> databasesList = new List<Databases>();
