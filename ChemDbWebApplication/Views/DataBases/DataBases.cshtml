@@ -1,15 +1,20 @@
 ﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "Базы данных";
+    var pageNumber = (int)ViewData["pageNumber"];
 }
 
 
+@using Microsoft.AspNetCore.Http.Extensions
 @using WebApplication2.Models
 @model IEnumerable<WebApplication2.ITabled>
 <div>
     <h1>Базы данных</h1>
     <br>
 </div>
+@*// TODO СДЕЛАТЬ ЧТОБЫ МОЖНО БЫЛО ПЕРЕКЛЮЧАТЬСЯ МЕЖДУ СТРАНИЦАМИ, ЧЕРЕЗ /DATABASES?PGN=PAGE_NUMBER НА СТРАНИЦАХ БУДЕТ ПО 20 БД, ПРЕ
+// ПРЕДУСМОТРЕТЬ ЧТО ИДНЕКС МОДЕТ БЫТЬ БОЛЬШЕ.
+// TODO 404 PAGE *@
 <div>
     <table class="table table-bordered table-striped" style="width: 100%">
         <thead style="vertical-align: baseline">
@@ -26,19 +31,30 @@
                         <a class="dropdown-item" href="~/DataBases/DataBases?filter=По названию">По названию</a>
                         <a class="dropdown-item" href="~/DataBases/DataBases?filter=Организация разработчик">Организация разработчик</a>
                         <a class="dropdown-item" href="~/DataBases/DataBases?filter=Ключевые слова">Ключевые слова</a>
-                        <a class="dropdown-item" href="~/DataBases/DataBases?filter=Литературные ссылки">Литературные ссылки</a>
                     </div>
                 </div>
             </th>
         </tr>
         </thead>
         <tbody>
+        @{
+            int maxBound = 0;
+            if (pageNumber == Math.Ceiling(Model.Count() / 20.0))
+            {
+                maxBound = Model.Count();
+            }
+            else
+            {
+                maxBound = pageNumber * 20;
+            }
+        }
         @switch (Model)
         {
             case IEnumerable<KeywordsInfo>:
             {
-                foreach (var keyword in (IEnumerable<KeywordsInfo>) Model)
+                for (int i = (pageNumber - 1) * 20; i < maxBound; i++)
                 {
+                    KeywordsInfo keyword = ((IEnumerable<KeywordsInfo>) Model).ElementAt(i);
                     <tr>
                         <td>@keyword.KeywordID</td>
                         <td>
@@ -57,14 +73,15 @@
             }
             case IEnumerable<Databases>:
             {
-                foreach (var item in (IEnumerable<Databases>) Model)
+                for (int i = (pageNumber - 1) * 20; i < maxBound; i++)
                 {
+                    Databases db = ((IEnumerable<Databases>) Model).ElementAt(i);
                     <tr>
                         <td>
-                            @item.DatabaseID
+                            @db.DatabaseID
                         </td>
                         <td>
-                            <a href="~/DbPage/DbPage?id=@item.DatabaseID">@item.Name_rus</a>
+                            <a href="~/DbPage/DbPage?id=@db.DatabaseID">@db.Name_rus</a>
                         </td>
                     </tr>
                 }
@@ -72,38 +89,37 @@
             }
             case IEnumerable<OrganisationsInfo>:
             {
-                
-                foreach (var item in ((IEnumerable<OrganisationsInfo>) Model))
+                for (int i = (pageNumber - 1) * 20; i < maxBound; i++)
                 {
-                    
+                    OrganisationsInfo organisation = ((IEnumerable<OrganisationsInfo>) Model).ElementAt(i);
                     <tr>
                         <td>
-                            @item.OrganisationID
+                            @organisation.OrganisationID
                         </td>
                         <td>
-                            <a href="~/OrganisationPage/OrganisationPage?id=@item.OrganisationID">
-                            @if (string.IsNullOrEmpty(item.Name_rus))
-                            {
-                                if (string.IsNullOrEmpty(item.Name_eng))
+                            <a href="~/OrganisationPage/OrganisationPage?id=@organisation.OrganisationID">
+                                @if (string.IsNullOrEmpty(organisation.Name_rus))
                                 {
-                                    if (string.IsNullOrEmpty(item.Abbreviation_rus))
+                                    if (string.IsNullOrEmpty(organisation.Name_eng))
                                     {
-                                        @item.Abbreviation_eng
+                                        if (string.IsNullOrEmpty(organisation.Abbreviation_rus))
+                                        {
+                                            @organisation.Abbreviation_eng
+                                        }
+                                        else
+                                        {
+                                            @organisation.Abbreviation_rus
+                                        }
                                     }
                                     else
                                     {
-                                        @item.Abbreviation_rus
+                                        @organisation.Name_eng
                                     }
                                 }
                                 else
                                 {
-                                    @item.Name_eng
+                                    @organisation.Name_rus
                                 }
-                            }
-                            else
-                            {
-                                @item.Name_rus
-                            }
                             </a>
                         </td>
                     </tr>
@@ -114,3 +130,63 @@
         </tbody>
     </table>
 </div>
+<nav>
+    @{
+        var url = Context.Request.GetDisplayUrl();
+        if (url.Contains("pgn"))
+        {
+            url = url.Substring(0, url.IndexOf("pgn") - 1);
+        }
+        string connector = "?";
+        if (url.Contains("filter"))
+        {
+            connector = "&";
+        }
+        url += connector;
+    }
+    <ul class="pagination">
+        @if (pageNumber == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+        }
+        else
+        {
+            int prevPage = pageNumber - 1;
+            <li class="page-item">
+                <a class="page-link" href="@(url)pgn=@prevPage">Previous</a>
+            </li>
+        }
+        @for (int i = 0; i < Math.Ceiling(Model.Count() / 20.0); i++)
+        {
+            int j = i + 1;
+            if (j == pageNumber)
+            {
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="@(url)pgn=@pageNumber">@j</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@(url)pgn=@j">@j</a>
+                </li>
+            }
+        }
+        @if (pageNumber == (int)Math.Ceiling(Model.Count() / 20.0))
+        {
+            int nextPage = pageNumber + 1;
+            <li class="page-item disabled">
+                <a class="page-link">Next</a>
+            </li>
+        }
+        else
+        {
+            int nextPage = pageNumber + 1;
+            <li class="page-item">
+                <a class="page-link" href="@(url)pgn=@nextPage">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
