@@ -13,8 +13,6 @@ public class IricContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DatabasePrices>()
-            .HasKey(o => new {o.DatabaseID, o.LicenseTypeID});
         modelBuilder.Entity<Databases_Keywords>()
             .HasKey(o => new {o.DatabaseID, o.KeywordID});
         modelBuilder.Entity<DB_LitReferences>()
@@ -29,12 +27,9 @@ public class IricContext : DbContext
     public DbSet<Databases> Databases { get; set; }
     public DbSet<AuthorsInfo> AuthorsInfo { get; set; }
     public DbSet<CountriesInfo> CountriesInfo { get; set; }
-    public DbSet<CurrencyRates> CurrencyRates { get; set; }
-    public DbSet<DatabasePrices> DatabasePrices { get; set; }
     public DbSet<Databases_Keywords> Databases_Keywords { get; set; }
     public DbSet<DB_LitReferences> DB_LitReferences { get; set; }
     public DbSet<KeywordsInfo> KeywordsInfo { get; set; }
-    public DbSet<LicenseTypes> LicenseTypes { get; set; }
     public DbSet<LitReferences> LitReferences { get; set; }
     public DbSet<LitReferences_AuthorsInfo> LitReferences_AuthorsInfo { get; set; }
     public DbSet<OrganisationsInfo> OrganisationsInfo { get; set; }
