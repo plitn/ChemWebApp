@@ -14,16 +14,14 @@ public class DbPageController : Controller
         _context = db;
     }
     
-    // GET
-    public IActionResult DbPage()
-    {
-        return View();
-    }
-
     [HttpGet]
     public IActionResult DbPage(int id)
     {
-        // вся инфа о конкретной бд
+        if (id == null || id <= 0)
+        {
+            return Redirect("~/DataBases/DataBases");
+        }
+        // вся информация о выбранной БД
         ViewData["dbData"] = _context.Databases.First(x => x.DatabaseID == id);
         
         // id организаций разработчиков
@@ -31,7 +29,7 @@ public class DbPageController : Controller
                 .Select(x => x)
                 .Where(x => x.DatabaseID == id))
             .Select(x => x.OrganisationID);
-        // вся инфа о огранизациях-разработчиках
+        // вся информация о огранизациях-разработчиках
         var organisations = _context.OrganisationsInfo
             .Select(x => x)
             .Where(x => orgIds.Contains(x.OrganisationID));
@@ -46,13 +44,14 @@ public class DbPageController : Controller
         var keywords = _context.KeywordsInfo.Select(x => x)
             .Where(x => keywordId.Contains(x.KeywordID));
 
+        
+        
         var refrencesId = _context.DB_LitReferences
             .Where(x => x.DatabaseID == id)
             .Select(x => x.ReferenceID);
         var references = _context.LitReferences.Select(x => x)
             .Where(x => refrencesId.Contains(x.ReferenceID));
-        List<LitRefModel> referenceList =
-            new List<LitRefModel>();
+        List<LitRefModel> referenceList = new List<LitRefModel>();
         foreach (var reference in references)
         {
             var auId = _context.LitReferences_AuthorsInfo

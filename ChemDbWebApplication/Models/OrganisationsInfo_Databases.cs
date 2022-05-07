@@ -7,6 +7,6 @@ public class OrganisationsInfo_Databases
 {
     public int DatabaseID { get; set; }
     public int OrganisationID { get; set; }
-    public string Adreess_rus { get; set; }
-    public string Adreess_eng { get; set; }
+    public string Address_rus { get; set; }
+    public string Address_eng { get; set; }
 }

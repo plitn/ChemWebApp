@@ -13,17 +13,20 @@ public class KeyWordController : Controller
         _context = db;
     }
     
-    public IActionResult KeyWord()
-    {
-        return View();
-    }
 
     [HttpGet]
     public IActionResult Keyword(int id)
     {
+        if (id == null || id == 0)
+        {
+            return Redirect("~/DataBases/DataBases");
+        }
         ViewData["keyword"] = _context.KeywordsInfo.First(x => x.KeywordID == id);
-        var databasesIds = _context.Databases_Keywords.Where(x => x.KeywordID == id).Select(x => x.DatabaseID);
-        var databases = _context.Databases.Where(x => databasesIds.Contains(x.DatabaseID));
+        var databasesIds = _context.Databases_Keywords
+            .Where(x => x.KeywordID == id)
+            .Select(x => x.DatabaseID);
+        var databases = _context.Databases
+            .Where(x => databasesIds.Contains(x.DatabaseID));
         return View(databases);
     }
 }

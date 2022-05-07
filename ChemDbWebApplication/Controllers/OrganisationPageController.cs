@@ -13,14 +13,14 @@ public class OrganisationPageController : Controller
         _context = db;
     }
     
-    public IActionResult OrganisationPage()
-    {
-        return View();
-    }
 
     [HttpGet]
     public IActionResult OrganisationPage(int id)
     {
+        if (id == null || id == 0)
+        {
+            return Redirect("~/DataBases/DataBases");
+        }
         var organisation = _context.OrganisationsInfo.First(x => x.OrganisationID == id);
         ViewData["organisation"] = organisation;
         var countryInfo = _context.CountriesInfo.First(x => x.CountryID == organisation.CountryID);
