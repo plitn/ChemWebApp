@@ -12,7 +12,7 @@
     ViewBag.Title = title;
     Dictionary<string, string> dbInfoDictionary = new Dictionary<string, string>();
     dbInfoDictionary.Add("Название", string.IsNullOrEmpty(dataBase.Name_rus) ? dataBase.Name_eng : dataBase.Name_rus);
-    dbInfoDictionary.Add("Аббривеатура", string.IsNullOrEmpty(dataBase.Abbreviation_rus) ? dataBase.Abbreviation_eng : dataBase.Abbreviation_rus);
+    dbInfoDictionary.Add("Аббревиатура", string.IsNullOrEmpty(dataBase.Abbreviation_rus) ? dataBase.Abbreviation_eng : dataBase.Abbreviation_rus);
     dbInfoDictionary.Add("Примечание", string.IsNullOrEmpty(dataBase.Comments_rus) ? dataBase.Comments_eng : dataBase.Comments_rus);
     dbInfoDictionary.Add("Ключевые слова", keywordsString);
     dbInfoDictionary.Add("Страны разработчики", countriesString);

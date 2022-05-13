@@ -66,17 +66,23 @@
         </tr>
         </thead>
         <tbody>
-        @for (int i = (pageNumber - 1) * 20; i < maxBound; i++)
+        @if (Model.Count() != 0 && Model != null)
         {
-            var db = Model.ElementAt(i);
-            <tr>
-                <td>
-                    @db.DatabaseID
-                </td>
-                <td>
-                    <a href="~/DbPage/DbPage?id=@db.DatabaseID">@db.Name_rus</a>
-                </td>
-            </tr>
+            for (int i = (pageNumber - 1) * 20; i < maxBound; i++)
+            {
+                var db = Model.ElementAt(i);
+                <tr>
+                    <td>
+                        @db.DatabaseID
+                    </td>
+                    <td>
+                        <a href="~/DbPage/DbPage?id=@db.DatabaseID">@db.Name_rus</a>
+                    </td>
+                </tr>
+            }
+        } else
+        {
+            <h3>Не найдено</h3>
         }
         </tbody>
     </table>

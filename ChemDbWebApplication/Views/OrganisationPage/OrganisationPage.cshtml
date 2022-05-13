@@ -9,7 +9,7 @@
     Dictionary<string, string> organisationInfoDict = new Dictionary<string, string>();
     organisationInfoDict.Add("Название", string.IsNullOrEmpty(organisation.Name_rus) ? organisation.Name_eng : organisation.Name_rus);
     organisationInfoDict.Add("Страна", (string)ViewData["countryName"]);
-    organisationInfoDict.Add("Аббривеатура", string.IsNullOrEmpty(organisation.Abbreviation_eng) ? organisation.Abbreviation_rus : organisation.Abbreviation_eng);
+    organisationInfoDict.Add("Аббревиатура", string.IsNullOrEmpty(organisation.Abbreviation_eng) ? organisation.Abbreviation_rus : organisation.Abbreviation_eng);
     organisationInfoDict.Add("БД организации", Model.Count().ToString());
 }
 
